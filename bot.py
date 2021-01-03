@@ -16,16 +16,18 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix="!")
 
 @bot.command()
-async def schedule(ctx):
+async def today(ctx):
 
 	#this is a dictionary of all the people who I know is part of the schedule
 	dictionary = {'Cathy': '443813095622705152','Anthony': '133779065600475137', 'Henry': '139598054373195776', 'Yeff': '155755250228264960','Wendy': '411300301174341653','Jihoon': 'idk man, whatever jinhoon username is', 'Matt': '173502986448797696'}
 
 	#reads the csv file of the schedule.... note that there should be no headers
-	df = pd.read_csv('schedule.csv', header=1, encoding = 'utf8', delimiter=',')
+	df = pd.read_csv('schedule.csv', encoding = 'utf8', delimiter=',')
 	print(df)
 	day = findDay(datetime.date.today().strftime("%d %m %Y"))
 	week = week_number_of_month(datetime.datetime.today().date())
+	print("day", day)
+	print("week",week)
 
 	person = df.iloc[week-1,day]
 
@@ -36,6 +38,10 @@ async def schedule(ctx):
 		await ctx.channel.send(beginning + "<@" + dictionary.get(person) + ">" + end)
 	else:
 		await ctx.channel.send(beginning + person + end)
+
+@bot.command()
+async def schedule(ctx):
+	await ctx.channel.send(file=discord.File('Corey_Schedule.png'))
 
 # def users(ctx):
 # 	user_list = []
@@ -48,10 +54,12 @@ async def schedule(ctx):
 # 	return user_list
 
 def findDay(date):
-	today = datetime.datetime.strptime(date, '%d %m %Y').weekday()
+	today = datetime.datetime.strptime(date, '%d %m %Y').weekday()+1
 	return(today)
 
 def week_number_of_month(date_value):
      return (date_value.isocalendar()[1] - date_value.replace(day=1).isocalendar()[1] + 1)
 
+
+print("Running")
 bot.run(TOKEN)
