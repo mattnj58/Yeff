@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from math import ceil
 from discord.ext.commands import CommandNotFound
 import csv
+import pandas as pd
 
 load_dotenv()
 
@@ -36,10 +37,6 @@ def week_number_of_month(date_value):
 	return int(ceil((adjustedDom/7.0)-1.0))
     # return (date_value.isocalendar()[1] - date_value.replace(day=1).isocalendar()[1] + 1)
 
-#reads the csv file of the schedule
-#Note: that there should be no headers
-# df = pd.read_csv('schedule.csv', header=0, encoding = 'utf8', delimiter=',')
-
 person = " "
 dayNum = findDay(datetime.date.today().strftime("%d %m %Y"))
 weekNum = week_number_of_month(datetime.datetime.today().date())
@@ -47,22 +44,19 @@ weekNum = week_number_of_month(datetime.datetime.today().date())
 print("week " + str(weekNum))
 print("day " + str(dayNum))
 
+#reads the csv file of the schedule
 with open('schedule.csv') as file: 
 	csvFile = csv.reader(file, delimiter=',')
-	line=0 
-	column=0 
-	for row in csvFile: 
-		# print(row)
-		if line==0:
-			line+=1
-		elif line==weekNum+1:
-			person=row[dayNum]
-			# print(person)
-		else:
-			line+=1
-	print(person)
+	header= next(csvFile)
+	if header != None:
+		for i, row in enumerate(csvFile):
+			# print(row[dayNum])
+			if i==weekNum:
+				print(row[dayNum])
+				person = row[dayNum]
 
-# person = df.iloc[weekNum-1,dayNum]
+# df = pd.read_csv('schedule.csv')
+# person = df.iloc[weekNum,dayNum]
 
 @bot.command()
 async def todo(ctx):
@@ -189,6 +183,10 @@ async def on_command_error(ctx, error):
 async def status(ctx):
 	print(ctx.author.activities)
 	await ctx.channel.send(ctx.author.acitivites)
+
+@bot.command()
+async def baby(ctx):
+	await ctx.channel.send()
 
 @bot.event
 async def chan(msg):
