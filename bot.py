@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 from math import ceil
 from discord.ext.commands import CommandNotFound
 import csv
-import pandas as pd
 
 load_dotenv()
 
