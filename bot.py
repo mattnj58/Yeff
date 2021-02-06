@@ -85,9 +85,10 @@ async def today(ctx):
 async def week(ctx):
 	global weekNum 
 
-	await ctx.channel.send('It is week ' + str(weekNum))
-	await ctx.channel.send("Here's this week's schedule: ")
-	await ctx.channel.send(df.iloc[weekNum-1])
+	# await ctx.channel.send('It is week ' + str(weekNum))
+	# await ctx.channel.send("Here's this week's schedule: ")
+	# await ctx.channel.send(df.iloc[weekNum-1])
+	await ctx.channel.send("Master is a lazy and hasn't fixed this command")
 
 @bot.command()
 async def day(ctx):
@@ -106,7 +107,7 @@ async def change(ctx, newPerson):
 	global changed
 	global person
 
-	if not changed:
+	if changed == False:
 		changed = True
 		await ctx.channel.send("It was <@" + dictionary.get(person) + ">'s day, but it's " + newPerson + "'s day now")
 	else:
