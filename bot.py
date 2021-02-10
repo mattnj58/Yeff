@@ -67,8 +67,20 @@ async def todo(ctx):
 async def today(ctx):
 
 	global person
-	global weekNum
-	global dayNum
+
+	dayNum = findDay(datetime.date.today().strftime("%d %m %Y"))
+	weekNum = week_number_of_month(datetime.datetime.today().date())
+
+	#reads the csv file of the schedule
+	with open('schedule.csv') as file: 
+		csvFile = csv.reader(file, delimiter=',')
+		header= next(csvFile)
+		if header != None:
+			for i, row in enumerate(csvFile):
+				# print(row[dayNum])
+				if i==weekNum:
+					print(row[dayNum])
+					person = row[dayNum]
 
 	print(person)
 
