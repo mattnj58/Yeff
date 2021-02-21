@@ -44,7 +44,7 @@ print("week " + str(weekNum))
 print("day " + str(dayNum))
 
 #reads the csv file of the schedule
-with open('schedule.csv') as file: 
+with open('schedule.csv') as file:
 	csvFile = csv.reader(file, delimiter=',')
 	header= next(csvFile)
 	if header != None:
@@ -72,7 +72,7 @@ async def today(ctx):
 	weekNum = week_number_of_month(datetime.datetime.today().date())
 
 	#reads the csv file of the schedule
-	with open('schedule.csv') as file: 
+	with open('schedule.csv') as file:
 		csvFile = csv.reader(file, delimiter=',')
 		header= next(csvFile)
 		if header != None:
@@ -95,7 +95,7 @@ async def today(ctx):
 
 @bot.command()
 async def week(ctx):
-	global weekNum 
+	global weekNum
 
 	# await ctx.channel.send('It is week ' + str(weekNum))
 	# await ctx.channel.send("Here's this week's schedule: ")
@@ -105,9 +105,10 @@ async def week(ctx):
 @bot.command()
 async def day(ctx):
 	global dayNum
-
-	print()
-	await ctx.channel.send("huh?")
+    dayNum = print(datetime.datetime.now().strftime("%A"))
+	#print()
+    #await ctx.channel.send("huh?")
+    await ctx.channel.send(dayNum)
 
 @bot.command()
 async def schedule(ctx):
