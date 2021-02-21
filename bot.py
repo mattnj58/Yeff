@@ -104,10 +104,10 @@ async def week(ctx):
 
 @bot.command()
 async def day(ctx):
-	global dayNum
-
-	print()
-	await ctx.channel.send("huh?")
+    global dayNum 
+    weekDay = datetime.datetime.now().strftime("%A")
+	#await ctx.channel.send("huh?")
+    await ctx.channel.send("Today is " + weekDay + " my dudes") 
 
 @bot.command()
 async def schedule(ctx):
@@ -198,7 +198,7 @@ async def status(ctx):
 
 @bot.command()
 async def baby(ctx):
-	await ctx.channel.send()
+	await ctx.channel.send("<@" + dictionary.get('cathy') + '> thinks she is the baby when <@' + dictionary.get('matt') +'> is the real baby for his name is Babyeater58')
 
 @bot.event
 async def chan(msg):
@@ -207,6 +207,19 @@ async def chan(msg):
 	# chan = await msg.guild.create_txt_channel(name='new text')
 	# web=await chan.create_webhook(name='new web')
 	# print(web.url)
+
+@bot.command()
+async def shutdown(ctx):
+	if ctx.message.author.id == 173502986448797696:
+		print("Shutting Down")
+		try:
+			await ctx.send("Shutting Down.... Bye bye")
+			await ctx.bot.logout()
+		except:
+			print("Environment Error")
+			ctx.bot.clear()
+	else:
+		await ctx.send("You do not own this bot!")
 
 print("Running")
 bot.run(TOKEN)
