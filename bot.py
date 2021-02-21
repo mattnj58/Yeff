@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 from math import ceil
 from discord.ext.commands import CommandNotFound
 import csv
+import pytz
+from pytz import timezone
 
 load_dotenv()
 
@@ -24,6 +26,7 @@ changed = False
 dictionary = {'cathy': '443813095622705152','anthony': '133779065600475137', 'henry': '139598054373195776', 'yeff': '155755250228264960','wendy': '411300301174341653','jihoon': '77268822075125760', 'matt': '173502986448797696','pedro':'177602897381556224', 'jon': '77186511736410112'}
 weekDay = {'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'}
 
+#looks for the day and week number 
 def findDay(date):
 	today = datetime.datetime.strptime(date, '%d %m %Y').weekday()+1
 	return(today)
@@ -33,15 +36,19 @@ def week_number_of_month(date_value):
 	dom = date_value.day
 	adjustedDom = dom + firstDay.weekday()
 
-	return int(ceil((adjustedDom/7.0)-1.0))
+	return int(ceil((adjustedDom/7.0)))
     # return (date_value.isocalendar()[1] - date_value.replace(day=1).isocalendar()[1] + 1)
 
-person = " "
-dayNum = findDay(datetime.date.today().strftime("%d %m %Y"))
-weekNum = week_number_of_month(datetime.datetime.today().date())
+eastern=timezone("US/Eastern")
+loc_dt = eastern.localize(datetime.datetime.now())
+# print(loc_dt)
 
-print("week " + str(weekNum))
-print("day " + str(dayNum))
+person = " "
+weekNum = week_number_of_month(loc_dt.date())
+dayNum = findDay(loc_dt.strftime("%d %m %Y"))
+
+# print("week " + str(weekNum))
+# print("day " + str(dayNum))
 
 #reads the csv file of the schedule
 with open('schedule.csv') as file:
@@ -51,25 +58,22 @@ with open('schedule.csv') as file:
 		for i, row in enumerate(csvFile):
 			# print(row[dayNum])
 			if i==weekNum:
-				print(row[dayNum])
+				# print(row[dayNum])
 				person = row[dayNum]
-
-# df = pd.read_csv('schedule.csv')
-# person = df.iloc[weekNum,dayNum]
 
 @bot.command()
 async def todo(ctx):
 	user = str(ctx.message.author.id)
-	# print(user)
 	await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n week, day, explain, pedro")
 
 @bot.command()
 async def today(ctx):
 
 	global person
+	global loc_dt
 
-	dayNum = findDay(datetime.date.today().strftime("%d %m %Y"))
-	weekNum = week_number_of_month(datetime.datetime.today().date())
+	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
+	weekNum = week_number_of_month(loc_dt.date())
 
 	#reads the csv file of the schedule
 	with open('schedule.csv') as file:
@@ -77,12 +81,8 @@ async def today(ctx):
 		header= next(csvFile)
 		if header != None:
 			for i, row in enumerate(csvFile):
-				# print(row[dayNum])
 				if i==weekNum:
-					print(row[dayNum])
 					person = row[dayNum]
-
-	print(person)
 
 	beginning = "It is "
 	end = "'s day today"
@@ -106,7 +106,6 @@ async def week(ctx):
 async def day(ctx):
     global dayNum 
     weekDay = datetime.datetime.now().strftime("%A")
-	#await ctx.channel.send("huh?")
     await ctx.channel.send("Today is " + weekDay + " my dudes") 
 
 @bot.command()
@@ -177,7 +176,6 @@ async def live(ctx):
 
 @bot.command()
 async def request(ctx):
-	# file=discord.File('fireCan.jpg')
 	await ctx.channel.send("Please send submit your command request and a description of it into the following container")
 	await ctx.channel.send(file = discord.File('fireCan.jpg'))
 
@@ -188,7 +186,6 @@ async def reprimand(ctx):
 @bot.event
 async def on_command_error(ctx, error):
 	if isinstance(error, CommandNotFound):
-		# await ctx.channel.send("huh?")
 		print("Command not found")
 
 @bot.command()
@@ -199,14 +196,6 @@ async def status(ctx):
 @bot.command()
 async def baby(ctx):
 	await ctx.channel.send("<@" + dictionary.get('cathy') + '> thinks she is the baby when <@' + dictionary.get('matt') +'> is the real baby for his name is Babyeater58')
-
-@bot.event
-async def chan(msg):
-	print()
-	# await ctx.channel.send()
-	# chan = await msg.guild.create_txt_channel(name='new text')
-	# web=await chan.create_webhook(name='new web')
-	# print(web.url)
 
 @bot.command()
 async def shutdown(ctx):
