@@ -109,7 +109,7 @@ async def day(ctx):
 	#print()
     #await ctx.channel.send("huh?")
     await ctx.channel.send(dayNum)
-	#a change 
+	#a change x2
 
 @bot.command()
 async def schedule(ctx):
