@@ -61,12 +61,12 @@ with open('schedule.csv') as file:
 				# print(row[dayNum])
 				person = row[dayNum]
 
-@bot.command()
+@bot.command(brief="This is a list of commands that are currently planned/in production")
 async def todo(ctx):
 	user = str(ctx.message.author.id)
 	await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n week, day, explain, pedro")
 
-@bot.command()
+@bot.command(brief="Shows who's day it is with Corey (aka Frodo's Other Sandwich)")
 async def today(ctx):
 
 	global person
@@ -102,17 +102,17 @@ async def week(ctx):
 	# await ctx.channel.send(df.iloc[weekNum-1])
 	await ctx.channel.send("Master is a lazy and hasn't fixed this command")
 
-@bot.command()
+@bot.command(brief='Shows what day of the week it is')
 async def day(ctx):
     global dayNum 
     weekDay = datetime.datetime.now().strftime("%A")
     await ctx.channel.send("Today is " + weekDay + " my dudes") 
 
-@bot.command()
+@bot.command(brief="Returns the schedule for who's day it is with Corey (aka Frodo's Other Sandwich")
 async def schedule(ctx):
 	await ctx.channel.send(file=discord.File('Corey_Schedule.png'))
 
-@bot.command()
+@bot.command(brief="Changes the who's day it is with Corey")
 async def change(ctx, newPerson):
 
 	global changed
@@ -124,7 +124,7 @@ async def change(ctx, newPerson):
 	else:
 		await ctx.channel.send("The day has been changed, you cannot change it again")
 
-@bot.command(pass_context=True, aliases=['changeback'])
+@bot.command(pass_context=True, aliases=['changeback'], brief="Changes back the day to the original person on the schedule")
 async def changeBack(ctx):
 
 	global changed
@@ -135,51 +135,51 @@ async def changeBack(ctx):
 	else:
 		await ctx.channel.send("You can't change back if the day hasn't been changed")
 
-@bot.command(pass_context=True, aliases=['Yeff'])
+@bot.command(pass_context=True, aliases=['Yeff'], brief="Calling Yeff (aka Jeff)")
 async def yeff(ctx):
 	await ctx.channel.send("<@155755250228264960>")
 
-@bot.command()
+@bot.command(brief="Shows who's the master")
 async def master(ctx):
 	await ctx.channel.send("<@173502986448797696> is the master, nobody goes against the master")
 
-@bot.command(pass_context=True, aliases=['dad', 'Dad', 'Daddy'])
+@bot.command(pass_context=True, aliases=['dad', 'Dad', 'Daddy'], brief="Shows who's the daddy in this server?")
 async def daddy(ctx):
 	await ctx.channel.send("<@139598054373195776> is <@443813095622705152>'s daddy")
 
-@bot.command(pass_context=True, aliases=['hubby'])
+@bot.command(pass_context=True, aliases=['hubby'], brief="Shows who's the husband of this server?")
 async def husband(ctx):
 	await ctx.channel.send("<@133779065600475137>")
 
-@bot.command(pass_context=True, aliases=['girlfriend'])
+@bot.command(pass_context=True, aliases=['girlfriend'], brief="Show's who's the girlfriend and the mother in this server... Different from the gf command")
 async def mother(ctx):
 	await ctx.channel.send("<@411300301174341653> is <@225359460812455936>'s girlfriend and <@443813095622705152>'s mother")
 
-@bot.command()
+@bot.command(brief="Show's who's the gf in the server... Different from the mother/girlfriend command")
 async def gf(ctx):
 	if(person=="cathy"):
 		await ctx.channel.send("Corey loves <@443813095622705152> the most")
 	else:
 		await ctx.channel.send("<@443813095622705152> is <@225359460812455936>'s gf")
 
-@bot.command(pass_context=True, aliases=['bae','corbae','coreybae','Corey'])
+@bot.command(pass_context=True, aliases=['bae','corbae','coreybae','Corey'], brief="We should all know who's Corey, but just in case")
 async def corey(ctx):
 	await ctx.channel.send("All hail the great <@225359460812455936> may he forever live a prosperous life")
 
-@bot.command(pass_context=True, alisases=['freecorey'])
+@bot.command(pass_context=True, alisases=['freecorey'], brief="Reveals the non-believers in the discord")
 async def freeCorey(ctx):
 	await ctx.channel.send("The following want to free <@225359460812455936>: <@483463488929529867> and <@184424945768464384>")
 
-@bot.command()
+@bot.command(brief="Announces when Corey is live on Twitch.tv")
 async def live(ctx):
 	await ctx.channel.send("@ everyone Corey, the great god, is streaming so hop in and say hi! www.twitch.tv/spareboredom")
 
-@bot.command()
+@bot.command(brief="Shows the steps needed to be taken to request a new command")
 async def request(ctx):
 	await ctx.channel.send("Please send submit your command request and a description of it into the following container")
 	await ctx.channel.send(file = discord.File('fireCan.jpg'))
 
-@bot.command(pass_context=True, aliases=['punish'])
+@bot.command(pass_context=True, aliases=['punish'], brief="Punishes Cathy")
 async def reprimand(ctx):
 	await ctx.channel.send("Go practice more piano! <@" + dictionary.get('cathy')+">")
 
@@ -193,11 +193,11 @@ async def status(ctx):
 	print(ctx.author.activities)
 	await ctx.channel.send(ctx.author.acitivites)
 
-@bot.command()
+@bot.command(brief="Show's who's the real baby in this server")
 async def baby(ctx):
 	await ctx.channel.send("<@" + dictionary.get('cathy') + '> thinks she is the baby when <@' + dictionary.get('matt') +'> is the real baby for his name is Babyeater58')
 
-@bot.command()
+@bot.command(brief="Shuts down the bot")
 async def shutdown(ctx):
 	if ctx.message.author.id == 173502986448797696:
 		print("Shutting Down")
@@ -209,6 +209,9 @@ async def shutdown(ctx):
 			ctx.bot.clear()
 	else:
 		await ctx.send("You do not own this bot!")
+
+
+
 
 print("Running")
 bot.run(TOKEN)
