@@ -44,7 +44,7 @@ loc_dt = eastern.localize(datetime.datetime.now())
 # print(loc_dt)
 
 person = " "
-weekNum = week_number_of_month(loc_dt.date())
+weekNum = week_number_of_month(loc_dt.date())-1
 dayNum = findDay(loc_dt.strftime("%d %m %Y"))
 
 # print("week " + str(weekNum))
@@ -73,7 +73,7 @@ async def today(ctx):
 	global loc_dt
 
 	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
-	weekNum = week_number_of_month(loc_dt.date())
+	weekNum = week_number_of_month(loc_dt.date())-1
 
 	#reads the csv file of the schedule
 	with open('schedule.csv') as file:
@@ -83,6 +83,10 @@ async def today(ctx):
 			for i, row in enumerate(csvFile):
 				if i==weekNum:
 					person = row[dayNum]
+	
+	print(weekNum)
+	print(dayNum)
+	print(person)
 
 	beginning = "It is "
 	end = "'s day today"
@@ -104,9 +108,8 @@ async def week(ctx):
 
 @bot.command(brief='Shows what day of the week it is')
 async def day(ctx):
-    global dayNum 
-	global loc_dt
-
+    global dayNum
+    global loc_dt
     weekDay = loc_dt.strftime("%A")
     await ctx.channel.send("Today is " + weekDay + " my dudes") 
 
