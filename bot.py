@@ -105,7 +105,9 @@ async def week(ctx):
 @bot.command(brief='Shows what day of the week it is')
 async def day(ctx):
     global dayNum 
-    weekDay = datetime.datetime.now().strftime("%A")
+	global loc_dt
+
+    weekDay = loc_dt.strftime("%A")
     await ctx.channel.send("Today is " + weekDay + " my dudes") 
 
 @bot.command(brief="Returns the schedule for who's day it is with Corey (aka Frodo's Other Sandwich")
