@@ -102,10 +102,10 @@ async def today(ctx):
 async def week(ctx):
 	global weekNum
 
-	# await ctx.channel.send('It is week ' + str(weekNum))
+	await ctx.channel.send('It is week ' + str(weekNum))
 	# await ctx.channel.send("Here's this week's schedule: ")
 	# await ctx.channel.send(df.iloc[weekNum-1])
-	await ctx.channel.send("Master is a lazy and hasn't fixed this command")
+	# await ctx.channel.send("Master is a lazy and hasn't fixed this command")
 
 @bot.command(brief='Shows what day of the week it is')
 async def day(ctx):
