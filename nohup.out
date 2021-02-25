@@ -1,0 +1,42 @@
+week 0
+day 6
+cast iron w da bois
+Running
+cast iron w da bois
+week 0
+day 6
+cast iron w da bois
+Running
+week 0
+day 6
+cast iron w da bois
+Running
+Running
+3
+3
+wendy
+3
+3
+wendy
+Running
+3
+3
+wendy
+3
+3
+wendy
+3
+3
+wendy
+  File "bot.py", line 65
+    async def todo(ctx):
+        ^
+SyntaxError: invalid syntax
+  File "bot.py", line 65
+    async def todo(ctx):
+        ^
+SyntaxError: invalid syntax
+Running
+3
+4
+jon
