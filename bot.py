@@ -84,8 +84,8 @@ async def today(ctx):
 				if i==weekNum:
 					person = row[dayNum]
 	
-	print(weekNum)
-	print(dayNum)
+	print("Week " + str(weekNum+1))
+	print("Day " + str(dayNum))
 	print(person)
 
 	beginning = "It is "
