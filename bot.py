@@ -230,22 +230,32 @@ async def test(ctx):
 	for server in bot.guilds:
 		for text in server.text_channels:
 				channel.append(text.id)
+	# print("Channel ID: " + str(channel[0]))
 
 @tasks.loop(hours=1.0)
 async def counter():
 	global channel
 	global changed
+	global dictionary
 
 	loc_dt = eastern.localize(datetime.datetime.now())
 	person = setPerson(loc_dt)
 	now = loc_dt.strftime("%H")
+	beginning = "It is "
+	end = "'s day today"
+	print(channel)
+	print("hour " + now)
 
 	if len(channel) !=0:
 		chan = bot.get_channel(channel[0])
-		if now == 9:
-			changed = False
+		if now == "11":
+			print(now)
+			# changed = False
 			print("It's 9am now")
-			await chan.send("It is <@" + dictionary.get(person) + ">'s day today")
+			if person in dictionary.keys():
+				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
+			else:
+				await chan.send(beginning + person + end)
 
 counter.start()
 
