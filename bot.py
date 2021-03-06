@@ -66,7 +66,7 @@ async def todo(ctx):
 	user = str(ctx.message.author.id)
 	await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n week, day, explain, pedro")
 
-@bot.command(brief="Shows who's day it is with Corey (aka Frodo's Other Sandwich)")
+@bot.command(brief="Shows whose day it is with Corey (aka Frodo's Other Sandwich)")
 async def today(ctx):
 
 	global person
