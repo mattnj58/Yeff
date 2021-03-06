@@ -10,6 +10,7 @@ from discord.ext.commands import CommandNotFound
 import csv
 import pytz
 from pytz import timezone
+from discord.ext import tasks, commands
 
 load_dotenv()
 
@@ -39,40 +40,8 @@ def week_number_of_month(date_value):
 	return int(ceil((adjustedDom/7.0)))
     # return (date_value.isocalendar()[1] - date_value.replace(day=1).isocalendar()[1] + 1)
 
-eastern=timezone("US/Eastern")
-loc_dt = eastern.localize(datetime.datetime.now())
-# print(loc_dt)
-
-person = " "
-weekNum = week_number_of_month(loc_dt.date())-1
-dayNum = findDay(loc_dt.strftime("%d %m %Y"))
-
-# print("week " + str(weekNum))
-# print("day " + str(dayNum))
-
-#reads the csv file of the schedule
-with open('schedule.csv') as file:
-	csvFile = csv.reader(file, delimiter=',')
-	header= next(csvFile)
-	if header != None:
-		for i, row in enumerate(csvFile):
-			# print(row[dayNum])
-			if i==weekNum:
-				# print(row[dayNum])
-				person = row[dayNum]
-
-@bot.command(brief="This is a list of commands that are currently planned/in production")
-async def todo(ctx):
-	user = str(ctx.message.author.id)
-	await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n week, day, explain, pedro")
-
-@bot.command(brief="Shows who's day it is with Corey (aka Frodo's Other Sandwich)")
-async def today(ctx):
-
-	global person
-	global loc_dt
-
-	loc_dt = eastern.localize(datetime.datetime.now())
+def setPerson(time):
+	peep = " "
 	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
 	weekNum = week_number_of_month(loc_dt.date())-1
 
@@ -83,11 +52,34 @@ async def today(ctx):
 		if header != None:
 			for i, row in enumerate(csvFile):
 				if i==weekNum:
-					person = row[dayNum]
-	
-	print(weekNum)
-	print(dayNum)
-	print(person)
+					peep = row[dayNum]
+	return peep
+
+eastern=timezone("US/Eastern")
+loc_dt = eastern.localize(datetime.datetime.now())
+# print(loc_dt)
+
+person = " "
+
+@bot.command(brief="This is a list of commands that are currently planned/in production")
+async def todo(ctx):
+	user = str(ctx.message.author.id)
+	await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n week, day, explain, pedro")
+
+@bot.command(brief="Shows whose day it is with Corey (aka Frodo's Other Sandwich)")
+async def today(ctx):
+
+	global person
+	global loc_dt
+
+	loc_dt = eastern.localize(datetime.datetime.now())
+<<<<<<< HEAD
+	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
+	weekNum = week_number_of_month(loc_dt.date())-1
+=======
+>>>>>>> babyeater58
+
+	person = setPerson(loc_dt)
 
 	beginning = "It is "
 	end = "'s day today"
@@ -217,8 +209,34 @@ async def shutdown(ctx):
 	else:
 		await ctx.send("You do not own this bot!")
 
+@tasks.loop(hours=1.0)
+async def counter():
+	global channel
+	global changed
 
+	loc_dt = eastern.localize(datetime.datetime.now())
+	person = setPerson(loc_dt)
+	now = loc_dt.strftime("%H")
 
+	if len(channel) !=0:
+		chan = bot.get_channel(channel[0])
+		if now == 9:
+			changed = False
+			await chan.send("It is <@" + dictionary.get(person) + ">'s day today")
+
+counter.start()
+
+channel = []
+
+@bot.command()
+async def test(ctx):
+
+	global channel
+
+	for server in bot.guilds:
+		for text in server.text_channels:
+				channel.append(text.id)
 
 print("Running")
 bot.run(TOKEN)
+
