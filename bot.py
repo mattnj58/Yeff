@@ -10,6 +10,7 @@ from discord.ext.commands import CommandNotFound
 import csv
 import pytz
 from pytz import timezone
+from discord.ext import tasks, commands
 
 load_dotenv()
 
@@ -39,27 +40,26 @@ def week_number_of_month(date_value):
 	return int(ceil((adjustedDom/7.0)))
     # return (date_value.isocalendar()[1] - date_value.replace(day=1).isocalendar()[1] + 1)
 
+def setPerson(time):
+	peep = " "
+	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
+	weekNum = week_number_of_month(loc_dt.date())-1
+
+	#reads the csv file of the schedule
+	with open('schedule.csv') as file:
+		csvFile = csv.reader(file, delimiter=',')
+		header= next(csvFile)
+		if header != None:
+			for i, row in enumerate(csvFile):
+				if i==weekNum:
+					peep = row[dayNum]
+	return peep
+
 eastern=timezone("US/Eastern")
 loc_dt = eastern.localize(datetime.datetime.now())
 # print(loc_dt)
 
 person = " "
-weekNum = week_number_of_month(loc_dt.date())-1
-dayNum = findDay(loc_dt.strftime("%d %m %Y"))
-
-# print("week " + str(weekNum))
-# print("day " + str(dayNum))
-
-#reads the csv file of the schedule
-with open('schedule.csv') as file:
-	csvFile = csv.reader(file, delimiter=',')
-	header= next(csvFile)
-	if header != None:
-		for i, row in enumerate(csvFile):
-			# print(row[dayNum])
-			if i==weekNum:
-				# print(row[dayNum])
-				person = row[dayNum]
 
 @bot.command(brief="This is a list of commands that are currently planned/in production")
 async def todo(ctx):
@@ -72,21 +72,9 @@ async def today(ctx):
 	global person
 	global loc_dt
 
-	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
-	weekNum = week_number_of_month(loc_dt.date())-1
+	loc_dt = eastern.localize(datetime.datetime.now())
 
-	#reads the csv file of the schedule
-	with open('schedule.csv') as file:
-		csvFile = csv.reader(file, delimiter=',')
-		header= next(csvFile)
-		if header != None:
-			for i, row in enumerate(csvFile):
-				if i==weekNum:
-					person = row[dayNum]
-	
-	print("Week " + str(weekNum+1))
-	print("Day " + str(dayNum))
-	print(person)
+	person = setPerson(loc_dt)
 
 	beginning = "It is "
 	end = "'s day today"
@@ -101,10 +89,11 @@ async def today(ctx):
 async def week(ctx):
 	global weekNum
 
-	# await ctx.channel.send('It is week ' + str(weekNum))
+	weekNum = week_number_of_month(loc_dt.date())-1
+	await ctx.channel.send('It is week ' + str(weekNum+1))
 	# await ctx.channel.send("Here's this week's schedule: ")
 	# await ctx.channel.send(df.iloc[weekNum-1])
-	await ctx.channel.send("Master is a lazy and hasn't fixed this command")
+	# await ctx.channel.send("Master is a lazy and hasn't fixed this command")
 
 @bot.command(brief='Shows what day of the week it is')
 async def day(ctx):
@@ -215,8 +204,34 @@ async def shutdown(ctx):
 	else:
 		await ctx.send("You do not own this bot!")
 
+@tasks.loop(hours=1.0)
+async def counter():
+	global channel
+	global changed
 
+	loc_dt = eastern.localize(datetime.datetime.now())
+	person = setPerson(loc_dt)
+	now = loc_dt.strftime("%H")
 
+	if len(channel) !=0:
+		chan = bot.get_channel(channel[0])
+		if now == 9:
+			changed = False
+			await chan.send("It is <@" + dictionary.get(person) + ">'s day today")
+
+counter.start()
+
+channel = []
+
+@bot.command()
+async def test(ctx):
+
+	global channel
+
+	for server in bot.guilds:
+		for text in server.text_channels:
+				channel.append(text.id)
 
 print("Running")
 bot.run(TOKEN)
+
