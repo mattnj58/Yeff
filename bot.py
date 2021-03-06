@@ -64,24 +64,24 @@ person = " "
 
 @bot.command(brief="This is a list of commands that are currently planned/in production")
 async def todo(ctx, op, command):
-	if ctx.message.author.id == 173502986448797696:
-		if op == "add" || op =="a":
-			try: 
-				f = open("todo.txt", mode="a")
-				f.write(command + "\n")
-				f.close
-			except:
-				print("Something went wrong with adding, it'll be fixed")
-		elif op == "remove" || op == "r":
-			try:
-				f=open("todo.txt", mode="w+")
-				data = f.read()
-				data = data.replace(command,"")
-				f.write(data)
-			except:
-				print("Something went wrong with removing, it'll be fixed soon")
-	else:
-		await ctx.send("You do not own this bot!")
+	# if ctx.message.author.id == 173502986448797696:
+	# 	if op == "add" or op =="a":
+	# 		try: 
+	# 			f = open("todo.txt", mode="a")
+	# 			f.write(command + "\n")
+	# 			f.close
+	# 		except:
+	# 			print("Something went wrong with adding, it'll be fixed")
+	# 	elif op == "remove" or op == "r":
+	# 		try:
+	# 			f=open("todo.txt", mode="w+")
+	# 			data = f.read()
+	# 			data = data.replace(command,"")
+	# 			f.write(data)
+	# 		except:
+	# 			print("Something went wrong with removing, it'll be fixed soon")
+	# else:
+	# 	await ctx.send("You do not own this bot!")
 	user = str(ctx.message.author.id)
 	await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n explain, pedro, todo")
 
