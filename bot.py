@@ -73,11 +73,6 @@ async def today(ctx):
 	global loc_dt
 
 	loc_dt = eastern.localize(datetime.datetime.now())
-<<<<<<< HEAD
-	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
-	weekNum = week_number_of_month(loc_dt.date())-1
-=======
->>>>>>> babyeater58
 
 	person = setPerson(loc_dt)
 
