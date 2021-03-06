@@ -16,12 +16,13 @@ load_dotenv()
 
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-# client = discord.Client()
-
 bot = commands.Bot(command_prefix=["!",'?'])
 
 #flag to check if corey has changed hands
 changed = False
+
+#A list of all the channels in the discord
+channel = []
 
 #this is a dictionary of all the people who I know is part of the schedule
 dictionary = {'cathy': '443813095622705152','anthony': '133779065600475137', 'henry': '139598054373195776', 'yeff': '155755250228264960','wendy': '411300301174341653','jihoon': '77268822075125760', 'matt': '173502986448797696','pedro':'177602897381556224', 'jon': '77186511736410112'}
@@ -62,9 +63,27 @@ loc_dt = eastern.localize(datetime.datetime.now())
 person = " "
 
 @bot.command(brief="This is a list of commands that are currently planned/in production")
-async def todo(ctx):
+async def todo(ctx, op, command):
+	if ctx.message.author.id == 173502986448797696:
+		if op == "add" || op =="a":
+			try: 
+				f = open("todo.txt", mode="a")
+				f.write(command + "\n")
+				f.close
+			except:
+				print("Something went wrong with adding, it'll be fixed")
+		elif op == "remove" || op == "r":
+			try:
+				f=open("todo.txt", mode="w+")
+				data = f.read()
+				data = data.replace(command,"")
+				f.write(data)
+			except:
+				print("Something went wrong with removing, it'll be fixed soon")
+	else:
+		await ctx.send("You do not own this bot!")
 	user = str(ctx.message.author.id)
-	await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n week, day, explain, pedro")
+	await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n explain, pedro, todo")
 
 @bot.command(brief="Shows whose day it is with Corey (aka Frodo's Other Sandwich)")
 async def today(ctx):
@@ -83,7 +102,6 @@ async def today(ctx):
 		await ctx.channel.send(beginning + "<@" + dictionary.get(person) + ">" + end)
 	else:
 		await ctx.channel.send(beginning + person + end)
-
 
 @bot.command()
 async def week(ctx):
@@ -204,6 +222,15 @@ async def shutdown(ctx):
 	else:
 		await ctx.send("You do not own this bot!")
 
+@bot.command()
+async def test(ctx):
+
+	global channel
+
+	for server in bot.guilds:
+		for text in server.text_channels:
+				channel.append(text.id)
+
 @tasks.loop(hours=1.0)
 async def counter():
 	global channel
@@ -217,20 +244,10 @@ async def counter():
 		chan = bot.get_channel(channel[0])
 		if now == 9:
 			changed = False
+			print("It's 9am now")
 			await chan.send("It is <@" + dictionary.get(person) + ">'s day today")
 
 counter.start()
-
-channel = []
-
-@bot.command()
-async def test(ctx):
-
-	global channel
-
-	for server in bot.guilds:
-		for text in server.text_channels:
-				channel.append(text.id)
 
 print("Running")
 bot.run(TOKEN)
