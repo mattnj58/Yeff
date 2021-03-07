@@ -256,10 +256,10 @@ async def counter():
 
 	if len(channel) !=0:
 		chan = bot.get_channel(channel[0])
-		if now == "11":
+		if now == "10":
 			print(now)
 			# changed = False
-			print("It's 9am now")
+			print("It's 10am now")
 			if person in dictionary.keys():
 				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
 			else:
