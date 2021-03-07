@@ -62,28 +62,38 @@ loc_dt = eastern.localize(datetime.datetime.now())
 
 person = " "
 
-@bot.command(brief="This is a list of commands that are currently planned/in production")
-async def todo(ctx, op, command):
-	# if ctx.message.author.id == 173502986448797696:
-	# 	if op == "add" or op =="a":
-	# 		try: 
-	# 			f = open("todo.txt", mode="a")
-	# 			f.write(command + "\n")
-	# 			f.close
-	# 		except:
-	# 			print("Something went wrong with adding, it'll be fixed")
-	# 	elif op == "remove" or op == "r":
-	# 		try:
-	# 			f=open("todo.txt", mode="w+")
-	# 			data = f.read()
-	# 			data = data.replace(command,"")
-	# 			f.write(data)
-	# 		except:
-	# 			print("Something went wrong with removing, it'll be fixed soon")
-	# else:
-	# 	await ctx.send("You do not own this bot!")
-	user = str(ctx.message.author.id)
-	await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n explain, pedro, todo")
+@bot.command(brief="Adds and removes task from the todo list")
+async def todo(ctx, *, msg=""):
+	tasks = []
+	msg = msg.split(" ")
+	if ctx.message.author.id == 173502986448797696:
+		if msg[0] == "add" or msg[0] =="a":
+			try:
+				f = open("todo.txt", mode="a")
+				f.write(msg[1] + "\n")
+				f.close()
+				await ctx.channel.send(msg[1] + " has been added to the todo list")
+			except:
+				print("Something went wrong with adding, it'll be fixed")
+		elif msg[0] == "remove" or msg[0] == "r":
+			try:
+				# f=open("todo.txt", mode="w+")
+				# data = f.read()
+				# data = data.replace(command,"")
+				# f.write(data)
+				# f.close()
+				await ctx.channel.send("Master is working on this command")
+			except:
+				print("Something went wrong with removing, it'll be fixed soon")
+		elif msg[0]=="":
+			f=open("todo.txt", "r")
+			for word in f.read().splitlines():
+				tasks.append(word)
+			await ctx.channel.send("Master would like to do <@" + str(ctx.message.author.id) + ">'s mother but he also plans to implement the following commands: \n" + (", ".join(tasks)))
+	else:
+		await ctx.send("You do not own this bot!")
+	# user = str(ctx.message.author.id)
+	# await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n explain, pedro, todo")
 
 @bot.command(brief="Shows whose day it is with Corey (aka Frodo's Other Sandwich)")
 async def today(ctx):
@@ -243,8 +253,6 @@ async def counter():
 	now = loc_dt.strftime("%H")
 	beginning = "It is "
 	end = "'s day today"
-	print(channel)
-	print("hour " + now)
 
 	if len(channel) !=0:
 		chan = bot.get_channel(channel[0])
