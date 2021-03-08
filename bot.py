@@ -122,9 +122,6 @@ async def week(ctx):
 
 	weekNum = week_number_of_month(loc_dt.date())-1
 	await ctx.channel.send('It is week ' + str(weekNum+1))
-	# await ctx.channel.send("Here's this week's schedule: ")
-	# await ctx.channel.send(df.iloc[weekNum-1])
-	# await ctx.channel.send("Master is a lazy and hasn't fixed this command")
 
 @bot.command(brief='Shows what day of the week it is')
 async def day(ctx):
@@ -259,10 +256,10 @@ async def counter():
 
 	if len(channel) !=0:
 		chan = bot.get_channel(channel[0])
-		if now == "11":
+		if now == "10":
 			print(now)
-			# changed = False
-			print("It's 9am now")
+			changed = False
+			print("It's 10am now")
 			if person in dictionary.keys():
 				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
 			else:
