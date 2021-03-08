@@ -232,16 +232,6 @@ async def shutdown(ctx):
 	else:
 		await ctx.send("You do not own this bot!")
 
-@bot.command()
-async def test(ctx):
-
-	global channel
-
-	for server in bot.guilds:
-		for text in server.text_channels:
-				channel.append(text.id)
-	# print("Channel ID: " + str(channel[0]))
-
 @tasks.loop(hours=1.0)
 async def counter():
 	global channel
@@ -254,6 +244,16 @@ async def counter():
 	beginning = "It is "
 	end = "'s day today"
 
+	for server in bot.guilds:
+		for text in server.text_channels:
+			if not text.id in channel:
+				channel.append(text.id)
+			else:
+				continue
+
+	print(channel)
+
+
 	if len(channel) !=0:
 		chan = bot.get_channel(channel[0])
 		if now == "10":
@@ -264,6 +264,8 @@ async def counter():
 				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
 			else:
 				await chan.send(beginning + person + end)
+		else:
+			print(dictionary.get(person))
 
 counter.start()
 
