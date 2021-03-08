@@ -77,14 +77,17 @@ async def todo(ctx, *, msg=""):
 				print("Something went wrong with adding, it'll be fixed")
 		elif msg[0] == "remove" or msg[0] == "r":
 			try:
-				# f=open("todo.txt", mode="w+")
-				# data = f.read()
-				# data = data.replace(command,"")
-				# f.write(data)
-				# f.close()
-				await ctx.channel.send("Master is working on this command")
+				f=open("todo.txt", mode="r")
+				lines = f.readlines()
+				f.close()
+				newFile = open("todo.txt", "w")
+				for line in lines:
+					if line.strip("\n") != msg[1]:
+						newFile.write(line)
+				newFile.close()
+				await ctx.channel.send("Deleted the command")
 			except:
-				print("Something went wrong with removing, it'll be fixed soon")
+				await ctx.channel.send("Unable to find the command")
 		elif msg[0]=="":
 			f=open("todo.txt", "r")
 			for word in f.read().splitlines():
@@ -256,10 +259,10 @@ async def counter():
 
 	if len(channel) !=0:
 		chan = bot.get_channel(channel[0])
-		if now == "10":
+		if now == "11":
 			print(now)
 			# changed = False
-			print("It's 10am now")
+			print("It's 9am now")
 			if person in dictionary.keys():
 				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
 			else:
