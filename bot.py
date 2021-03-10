@@ -210,11 +210,6 @@ async def on_command_error(ctx, error):
 	if isinstance(error, CommandNotFound):
 		print("Command not found")
 
-@bot.command()
-async def status(ctx):
-	print(ctx.author.activities)
-	await ctx.channel.send(ctx.author.acitivites)
-
 @bot.command(brief="Show's who's the real baby in this server")
 async def baby(ctx):
 	await ctx.channel.send("<@" + dictionary.get('cathy') + '> thinks she is the baby when <@' + dictionary.get('matt') +'> is the real baby for his name is Babyeater58')
@@ -232,17 +227,51 @@ async def shutdown(ctx):
 	else:
 		await ctx.send("You do not own this bot!")
 
+# url = "https://finnhub.io/api/v1/quote?token=" + os.getenv("FINNHUB_TOKEN")
+url = "https://finnhub.io/api/v1/quote?token=sandbox_bukmklv48v6qi7361ktg&symbol=aapl"
+
+def getPrice(tick):
+	res = request.get(url+"?symbol="+tick)
+	print(res)
+
+@bot.command(brief="Dedicated command for pedro")
+async def pedro(ctx, ticker):
+	global url
+
+	print(url)
+
+	# print(url+"?symbol="+ticker)
+	# res = request.get(url+"?symbol="+ticker)
+	res = request.get(url).json()
+	print(res)
+	# await ctx.channel.send(getPrice(ticker))
+
 @tasks.loop(hours=1.0)
 async def counter():
 	global channel
 	global changed
 	global dictionary
+	global person
 
 	loc_dt = eastern.localize(datetime.datetime.now())
-	person = setPerson(loc_dt)
 	now = loc_dt.strftime("%H")
 	beginning = "It is "
 	end = "'s day today"
+
+	# person = setPerson(loc_dt)
+	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
+	weekNum = week_number_of_month(loc_dt.date())-1
+
+	#reads the csv file of the schedule
+	with open('schedule.csv') as file:
+		csvFile = csv.reader(file, delimiter=',')
+		header= next(csvFile)
+		if header != None:
+			for i, row in enumerate(csvFile):
+				if i==weekNum:
+					person = row[dayNum]
+
+	print(loc_dt)
 
 	for server in bot.guilds:
 		for text in server.text_channels:
@@ -251,15 +280,12 @@ async def counter():
 			else:
 				continue
 
-	print(channel)
-
-
 	if len(channel) !=0:
 		chan = bot.get_channel(channel[0])
 		if now == "10":
-			print(now)
+			print("Hour " + now)
+			print(loc_dt)
 			changed = False
-			print("It's 10am now")
 			if person in dictionary.keys():
 				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
 			else:
