@@ -267,7 +267,7 @@ async def counter():
 		else:
 			print(dictionary.get(person))
 
-counter.start()
+#counter.start()
 
 print("Running")
 bot.run(TOKEN)
