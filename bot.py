@@ -217,7 +217,7 @@ async def baby(ctx):
 
 @bot.command(brief="This is mom, different from mother")
 async def mom(ctx):
-	await ctx.channel.send("<@"+dictionary.get("christine")+">is " <@"+dictionary.get('cathy')+">'s mom")
+	await ctx.channel.send("<@"+dictionary.get("christine")+">is <@"+dictionary.get('cathy')+">'s mom")
 
 @bot.command(brief="Shuts down the bot")
 async def shutdown(ctx):
@@ -298,9 +298,9 @@ async def counter():
 		else:
 			print(dictionary.get(person))
 
-@counter.before_loop
-async def counterBefore():
-	global 
+# @counter.before_loop
+# async def counterBefore():
+# 	global 
 
 #counter.start()
 
