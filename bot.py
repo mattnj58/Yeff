@@ -302,7 +302,7 @@ async def counter():
 async def counterBefore():
 	global 
 
-counter.start()
+#counter.start()
 
 print("Running")
 bot.run(TOKEN)
