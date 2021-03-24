@@ -25,7 +25,7 @@ changed = False
 channel = []
 
 #this is a dictionary of all the people who I know is part of the schedule
-dictionary = {'cathy': '443813095622705152','anthony': '133779065600475137', 'henry': '139598054373195776', 'yeff': '155755250228264960','wendy': '411300301174341653','jihoon': '77268822075125760', 'matt': '173502986448797696','pedro':'177602897381556224', 'jon': '77186511736410112'}
+dictionary = {'cathy': '443813095622705152','anthony': '133779065600475137', 'henry': '139598054373195776', 'yeff': '155755250228264960','wendy': '411300301174341653','jihoon': '77268822075125760', 'matt': '173502986448797696','pedro':'177602897381556224', 'jon': '77186511736410112', 'christine':'434507044905680898'}
 weekDay = {'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'}
 
 #looks for the day and week number 
@@ -214,6 +214,11 @@ async def on_command_error(ctx, error):
 async def baby(ctx):
 	await ctx.channel.send("<@" + dictionary.get('cathy') + '> thinks she is the baby when <@' + dictionary.get('matt') +'> is the real baby for his name is Babyeater58')
 
+
+@bot.command(brief="This is mom, different from mother")
+async def mom(ctx):
+	await ctx.channel.send("<@"+dictionary.get("christine")+">is " <@"+dictionary.get('cathy')+">'s mom")
+
 @bot.command(brief="Shuts down the bot")
 async def shutdown(ctx):
 	if ctx.message.author.id == 173502986448797696:
@@ -292,6 +297,10 @@ async def counter():
 				await chan.send(beginning + person + end)
 		else:
 			print(dictionary.get(person))
+
+@counter.before_loop
+async def counterBefore():
+	global 
 
 counter.start()
 
