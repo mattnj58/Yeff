@@ -37,8 +37,12 @@ def week_number_of_month(date_value):
 	firstDay = date_value.replace(day=1)
 	dom = date_value.day
 	adjustedDom = dom + firstDay.weekday()
+	num = int(ceil((adjustedDom/7.0)))
 
-	return int(ceil((adjustedDom/7.0)))
+	if num==5:
+		num=1
+
+	return num
     # return (date_value.isocalendar()[1] - date_value.replace(day=1).isocalendar()[1] + 1)
 
 def setPerson(time):
@@ -217,7 +221,7 @@ async def baby(ctx):
 
 @bot.command(brief="This is mom, different from mother")
 async def mom(ctx):
-	await ctx.channel.send("<@"+dictionary.get("christine")+">is " <@"+dictionary.get('cathy')+">'s mom")
+	await ctx.channel.send("<@"+dictionary.get("christine")+">is <@"+dictionary.get('cathy')+">'s mom")
 
 @bot.command(brief="Shuts down the bot")
 async def shutdown(ctx):
@@ -298,11 +302,11 @@ async def counter():
 		else:
 			print(dictionary.get(person))
 
-@counter.before_loop
-async def counterBefore():
-	global 
+# @counter.before_loop
+# async def counterBefore():
+# 	global 
 
-counter.start()
+# counter.start()
 
 print("Running")
 bot.run(TOKEN)
