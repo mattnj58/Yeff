@@ -37,8 +37,12 @@ def week_number_of_month(date_value):
 	firstDay = date_value.replace(day=1)
 	dom = date_value.day
 	adjustedDom = dom + firstDay.weekday()
+	num = int(ceil((adjustedDom/7.0)))
 
-	return int(ceil((adjustedDom/7.0)))
+	if num==5:
+		num=1
+
+	return num
     # return (date_value.isocalendar()[1] - date_value.replace(day=1).isocalendar()[1] + 1)
 
 def setPerson(time):
@@ -302,7 +306,11 @@ async def counter():
 # async def counterBefore():
 # 	global 
 
+<<<<<<< HEAD
 #counter.start()
+=======
+# counter.start()
+>>>>>>> babyeater58
 
 print("Running")
 bot.run(TOKEN)
