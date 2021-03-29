@@ -306,11 +306,7 @@ async def counter():
 # async def counterBefore():
 # 	global 
 
-<<<<<<< HEAD
 #counter.start()
-=======
-# counter.start()
->>>>>>> babyeater58
 
 print("Running")
 bot.run(TOKEN)
