@@ -12,6 +12,7 @@ import pytz
 from pytz import timezone
 from discord.ext import tasks, commands
 import aiohttp
+import random
 
 load_dotenv()
 
@@ -31,6 +32,7 @@ weekDay = {'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', '
 
 #URL for the pedro command
 url = "https://finnhub.io/api/v1/quote?token="+os.getenv('FINNHUB_TOKEN')
+randUrl = "https://finnhub.io/api/v1/stock/symbol?exchange=US&token="+os.getenv('FINNHUB_TOKEN')
 
 #looks for the day and week number 
 def findDay(date):
@@ -236,22 +238,32 @@ async def shutdown(ctx):
 	else:
 		await ctx.send("You do not own this bot!")
 
-# 	return price
+# price search
 @bot.command(brief="Dedicated command for pedro")
-async def pedro(ctx, ticker):
+async def pedro(ctx, ticker=None):
 	global url
 
 	session = aiohttp.ClientSession()
-	print(url+"&symbol="+ticker.upper())
-	res = await session.get(url+"&symbol="+ticker.upper())
-	json = await res.json()
-	price = json['c']
-	await session.close()
-	value = "$"+str(price)
-	await ctx.channel.send("The current price of " + ticker.upper() + " is:")
-	await ctx.channel.send(value)
-	# await ctx.channel.send("The price of " + ticker.upper() + " is " + price)
-	
+	company = random.randint(0,27115)
+
+	if(ticker==None):
+		res = await session.get(randUrl)
+		json = await res.json()
+		company = random.randint(0, len(json))
+		await session.close()
+		print(json[company])
+		await ctx.channel.send("Here's a random company for you to throw money at: ")
+		await ctx.channel.send(json[company]['symbol']+": " + json[company]['description'])
+	else:
+		res = await session.get(url+"&symbol="+ticker.upper())
+		json = await res.json()
+		price = json['c']
+		await session.close()
+		value = "$"+str(price)
+		await ctx.channel.send("The current price of " + ticker.upper() + " is:")
+		await ctx.channel.send(value)
+
+
 @tasks.loop(hours=1.0)
 async def counter():
 	global channel
