@@ -11,6 +11,7 @@ import csv
 import pytz
 from pytz import timezone
 from discord.ext import tasks, commands
+import aiohttp
 
 load_dotenv()
 
@@ -27,6 +28,9 @@ channel = []
 #this is a dictionary of all the people who I know is part of the schedule
 dictionary = {'cathy': '443813095622705152','anthony': '133779065600475137', 'henry': '139598054373195776', 'yeff': '155755250228264960','wendy': '411300301174341653','jihoon': '77268822075125760', 'matt': '173502986448797696','pedro':'177602897381556224', 'jon': '77186511736410112', 'christine':'434507044905680898'}
 weekDay = {'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'}
+
+#URL for the pedro command
+url = "https://finnhub.io/api/v1/quote?token="+os.getenv('FINNHUB_TOKEN')
 
 #looks for the day and week number 
 def findDay(date):
@@ -196,10 +200,6 @@ async def corey(ctx):
 async def freeCorey(ctx):
 	await ctx.channel.send("The following want to free <@225359460812455936>: <@483463488929529867> and <@184424945768464384>")
 
-@bot.command(brief="Announces when Corey is live on Twitch.tv")
-async def live(ctx):
-	await ctx.channel.send("@ everyone Corey, the great god, is streaming so hop in and say hi! www.twitch.tv/spareboredom")
-
 @bot.command(brief="Shows the steps needed to be taken to request a new command")
 async def request(ctx):
 	await ctx.channel.send("Please send submit your command request and a description of it into the following container")
@@ -236,25 +236,22 @@ async def shutdown(ctx):
 	else:
 		await ctx.send("You do not own this bot!")
 
-# url = "https://finnhub.io/api/v1/quote?token=" + os.getenv("FINNHUB_TOKEN")
-url = "https://finnhub.io/api/v1/quote?token=sandbox_bukmklv48v6qi7361ktg&symbol=aapl"
-
-def getPrice(tick):
-	res = request.get(url+"?symbol="+tick)
-	print(res)
-
+# 	return price
 @bot.command(brief="Dedicated command for pedro")
 async def pedro(ctx, ticker):
 	global url
 
-	print(url)
-
-	# print(url+"?symbol="+ticker)
-	# res = request.get(url+"?symbol="+ticker)
-	res = request.get(url).json()
-	print(res)
-	# await ctx.channel.send(getPrice(ticker))
-
+	session = aiohttp.ClientSession()
+	print(url+"&symbol="+ticker.upper())
+	res = await session.get(url+"&symbol="+ticker.upper())
+	json = await res.json()
+	price = json['c']
+	await session.close()
+	value = "$"+str(price)
+	await ctx.channel.send("The current price of " + ticker.upper() + " is:")
+	await ctx.channel.send(value)
+	# await ctx.channel.send("The price of " + ticker.upper() + " is " + price)
+	
 @tasks.loop(hours=1.0)
 async def counter():
 	global channel
