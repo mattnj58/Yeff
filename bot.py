@@ -242,18 +242,22 @@ async def shutdown(ctx):
 @bot.command(brief="Dedicated command for pedro")
 async def pedro(ctx, ticker=None):
 	global url
+	global randUrl
 
 	session = aiohttp.ClientSession()
-	company = random.randint(0,27115)
 
 	if(ticker==None):
 		res = await session.get(randUrl)
 		json = await res.json()
 		company = random.randint(0, len(json))
+		res2 = await session.get(url+"&symbol="+json[company]['symbol'].upper())
+		res2Price = await res2.json()
 		await session.close()
-		print(json[company])
+		# print(res2Price['c'])
+		value = '$'+str(res2Price['c'])
 		await ctx.channel.send("Here's a random company for you to throw money at: ")
 		await ctx.channel.send(json[company]['symbol']+": " + json[company]['description'])
+		await ctx.channel.send("The current price of it is: " + value)
 	else:
 		res = await session.get(url+"&symbol="+ticker.upper())
 		json = await res.json()
