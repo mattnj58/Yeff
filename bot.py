@@ -253,20 +253,58 @@ async def pedro(ctx, ticker=None):
 		res2 = await session.get(url+"&symbol="+json[company]['symbol'].upper())
 		res2Price = await res2.json()
 		await session.close()
-		# print(res2Price['c'])
-		value = '$'+str(res2Price['c'])
-		await ctx.channel.send("Here's a random company for you to throw money at: ")
-		await ctx.channel.send(json[company]['symbol']+": " + json[company]['description'])
-		await ctx.channel.send("The current price of it is: " + value)
+
+		# introduction = "Here's a random company for you to throw money at: \n"
+		comRec = str(json[company]['symbol']+': '+json[company]['description'])
+		value = str('$'+str(res2Price['c']))
+
+		# msg = discord.Embed(
+		# 	title = "Here's a random company for you to throw money at: \n",
+		# 	description = json[company]['symbol']+': '+json[company]['description'] + "\n Currently priced at $" + str(res2Price['c']
+		# )
+		msg = discord.Embed(
+			title = "Here's a random company for you to throw money at:",
+			description = comRec+" and the current price is: " + value
+		)
+
+		await ctx.channel.send(embed=msg)
 	else:
 		res = await session.get(url+"&symbol="+ticker.upper())
 		json = await res.json()
 		price = json['c']
 		await session.close()
 		value = "$"+str(price)
-		await ctx.channel.send("The current price of " + ticker.upper() + " is:")
-		await ctx.channel.send(value)
+		await ctx.channel.send("The current price of " + ticker.upper() + " is: \n" + value)
 
+@bot.command(brief= "Stock symbol search up")
+async def stonk(ctx, *name):
+
+	url = 'https://finnhub.io/api/v1/search?q=apple&token=bt1t0a748v6rjbouko1g'
+	# url = 'https://finnhub.io/api/v1/search?token=' + os.getenv('FINNHUB_TOKEN')
+
+	session = aiohttp.ClientSession()
+
+	names=''.join(name)
+
+	if(len(name)==0):
+		await ctx.channel.send("Please enter a company name")
+	else:
+		res = await session.get(url)
+		json = await res.json()
+		await session.close()
+		print(json)
+
+@bot.command(brief="Corey really likes bees")
+async def bees(ctx):
+	msg = discord.Embed(
+		title = "Corey really likes bees",
+		url="https://www.twitch.tv/spareboredom/clip/LovelyBetterPoultryCharlietheUnicorn-6n4hHw-NzMrEViyF?filter=clips&range=all&sort=time",
+		description='Like he really, really likes bees'
+	)
+
+	msg.set_thumbnail(url='https://i.imgur.com/5xt734i.jpg')
+
+	await ctx.channel.send(embed=msg)
 
 @tasks.loop(hours=1.0)
 async def counter():
