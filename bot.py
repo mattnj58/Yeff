@@ -76,8 +76,8 @@ person = " "
 async def todo(ctx, *, msg=""):
 	tasks = []
 	msg = msg.split(" ")
-	if ctx.message.author.id == dictionary.get("matt"):
-		if msg[0] == "add" or msg[0] =="a":
+	if ctx.message.author.id == dictionary.get('matt'):
+    		if msg[0] == "add" or msg[0] =="a":
 			try:
 				f = open("todo.txt", mode="a")
 				f.write(msg[1] + "\n")
@@ -225,7 +225,7 @@ async def mom(ctx):
 
 @bot.command(brief="Shuts down the bot")
 async def shutdown(ctx):
-	if ctx.message.author.id == dictionary.get("matt"):
+	if ctx.message.author.id == dictionary.get('matt'):
 		print("Shutting Down")
 		try:
 			await ctx.send("Shutting Down.... Bye bye")
@@ -271,7 +271,6 @@ async def pedro(ctx, ticker=None):
 	
 	await session.close()
 
-# Allows users to search up stock symbols with a given search 
 @bot.command(brief= "Stock symbol search up")
 async def stonk(ctx, *name):
 
@@ -281,7 +280,10 @@ async def stonk(ctx, *name):
 
 	names=''.join(name)
 
-	if(len(name)!=0):
+	if(len(name)==0):
+		await session.close()
+		await ctx.channel.send("Please enter a company name")
+	else:
 		res = await session.get(url+"&q="+names)
 		json = await res.json()
 		await session.close()
@@ -289,26 +291,15 @@ async def stonk(ctx, *name):
 		compList = json['result']
 		count = str(json['count'])
 
-		if(count!=0):
-			msg = discord.Embed(
-				title= "Search",
-				description="Here's a list of potential " + count +" companies that you could be looking for"
-			)
+		msg = discord.Embed(
+			title= "Search",
+			description="Here's a list of potential " + count +" companies that you could be looking for"
+		)
 
-			for i in range(json['count']):
-				msg.add_field(name=str(compList[i]['description']), value=str(compList[i]['displaySymbol']), inline=False)
+		for i in range(json['count']):
+			msg.add_field(name=str(compList[i]['description']), value=str(compList[i]['displaySymbol']), inline=False)
 
-			await ctx.channel.send(embed=msg)
-		else:
-			msg = discord.Embed(
-				title= "Search",
-				description="No companies by that name, please try again"
-			)
-
-			await ctx.channel.send(embed=msg)
-	else:
-		await session.close()
-		await ctx.channel.send("Please enter a company name")
+		await ctx.channel.send(embed=msg)
 
 	await session.close()
 
