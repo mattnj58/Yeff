@@ -275,24 +275,41 @@ async def pedro(ctx, ticker=None):
 		await session.close()
 		value = "$"+str(price)
 		await ctx.channel.send("The current price of " + ticker.upper() + " is: \n" + value)
+	
+	await session.close()
 
 @bot.command(brief= "Stock symbol search up")
 async def stonk(ctx, *name):
 
-	url = 'https://finnhub.io/api/v1/search?q=apple&token=bt1t0a748v6rjbouko1g'
-	# url = 'https://finnhub.io/api/v1/search?token=' + os.getenv('FINNHUB_TOKEN')
+	# url = 'https://finnhub.io/api/v1/search?q=apple&token=bt1t0a748v6rjbouko1g'
+	url = 'https://finnhub.io/api/v1/search?token=' + os.getenv('FINNHUB_TOKEN')
 
 	session = aiohttp.ClientSession()
 
 	names=''.join(name)
 
 	if(len(name)==0):
+		await session.close()
 		await ctx.channel.send("Please enter a company name")
 	else:
-		res = await session.get(url)
+		res = await session.get(url+"&q="+names)
 		json = await res.json()
 		await session.close()
-		print(json)
+
+		compList = json['result']
+		count = str(json['count'])
+
+		msg = discord.Embed(
+			title= "Search",
+			description="Here's a list of potential " + count +" companies that you could be looking for"
+		)
+
+		for i in range(json['count']):
+			msg.add_field(name=str(compList[i]['description']), value=str(compList[i]['displaySymbol']), inline=False)
+
+		await ctx.channel.send(embed=msg)
+
+	await session.close()
 
 @bot.command(brief="Corey really likes bees")
 async def bees(ctx):
