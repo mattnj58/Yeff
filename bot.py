@@ -77,7 +77,7 @@ async def todo(ctx, *, msg=""):
 	tasks = []
 	msg = msg.split(" ")
 	if ctx.message.author.id == dictionary.get('matt'):
-    		if msg[0] == "add" or msg[0] =="a":
+		if msg[0] == "add" or msg[0] =="a":
 			try:
 				f = open("todo.txt", mode="a")
 				f.write(msg[1] + "\n")
