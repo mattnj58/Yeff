@@ -76,7 +76,7 @@ person = " "
 async def todo(ctx, *, msg=""):
 	tasks = []
 	msg = msg.split(" ")
-	if ctx.message.author.id == 173502986448797696:
+	if ctx.message.author.id == dictionary.get("matt"):
 		if msg[0] == "add" or msg[0] =="a":
 			try:
 				f = open("todo.txt", mode="a")
@@ -105,8 +105,6 @@ async def todo(ctx, *, msg=""):
 			await ctx.channel.send("Master would like to do <@" + str(ctx.message.author.id) + ">'s mother but he also plans to implement the following commands: \n" + (", ".join(tasks)))
 	else:
 		await ctx.send("You do not own this bot!")
-	# user = str(ctx.message.author.id)
-	# await ctx.channel.send("Master would like to do <@" + user + ">'s mother but he also plans to implement the following commands: \n explain, pedro, todo")
 
 @bot.command(brief="Shows whose day it is with Corey (aka Frodo's Other Sandwich)")
 async def today(ctx):
@@ -227,7 +225,7 @@ async def mom(ctx):
 
 @bot.command(brief="Shuts down the bot")
 async def shutdown(ctx):
-	if ctx.message.author.id == 173502986448797696:
+	if ctx.message.author.id == dictionary.get("matt"):
 		print("Shutting Down")
 		try:
 			await ctx.send("Shutting Down.... Bye bye")
@@ -254,14 +252,9 @@ async def pedro(ctx, ticker=None):
 		res2Price = await res2.json()
 		await session.close()
 
-		# introduction = "Here's a random company for you to throw money at: \n"
 		comRec = str(json[company]['symbol']+': '+json[company]['description'])
 		value = str('$'+str(res2Price['c']))
 
-		# msg = discord.Embed(
-		# 	title = "Here's a random company for you to throw money at: \n",
-		# 	description = json[company]['symbol']+': '+json[company]['description'] + "\n Currently priced at $" + str(res2Price['c']
-		# )
 		msg = discord.Embed(
 			title = "Here's a random company for you to throw money at:",
 			description = comRec+" and the current price is: " + value
@@ -278,20 +271,17 @@ async def pedro(ctx, ticker=None):
 	
 	await session.close()
 
+# Allows users to search up stock symbols with a given search 
 @bot.command(brief= "Stock symbol search up")
 async def stonk(ctx, *name):
 
-	# url = 'https://finnhub.io/api/v1/search?q=apple&token=bt1t0a748v6rjbouko1g'
 	url = 'https://finnhub.io/api/v1/search?token=' + os.getenv('FINNHUB_TOKEN')
 
 	session = aiohttp.ClientSession()
 
 	names=''.join(name)
 
-	if(len(name)==0):
-		await session.close()
-		await ctx.channel.send("Please enter a company name")
-	else:
+	if(len(name)!=0):
 		res = await session.get(url+"&q="+names)
 		json = await res.json()
 		await session.close()
@@ -299,15 +289,26 @@ async def stonk(ctx, *name):
 		compList = json['result']
 		count = str(json['count'])
 
-		msg = discord.Embed(
-			title= "Search",
-			description="Here's a list of potential " + count +" companies that you could be looking for"
-		)
+		if(count!=0):
+			msg = discord.Embed(
+				title= "Search",
+				description="Here's a list of potential " + count +" companies that you could be looking for"
+			)
 
-		for i in range(json['count']):
-			msg.add_field(name=str(compList[i]['description']), value=str(compList[i]['displaySymbol']), inline=False)
+			for i in range(json['count']):
+				msg.add_field(name=str(compList[i]['description']), value=str(compList[i]['displaySymbol']), inline=False)
 
-		await ctx.channel.send(embed=msg)
+			await ctx.channel.send(embed=msg)
+		else:
+			msg = discord.Embed(
+				title= "Search",
+				description="No companies by that name, please try again"
+			)
+
+			await ctx.channel.send(embed=msg)
+	else:
+		await session.close()
+		await ctx.channel.send("Please enter a company name")
 
 	await session.close()
 
