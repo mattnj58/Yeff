@@ -323,7 +323,7 @@ async def bees(ctx):
 
 @bot.command(brief="It's the weekend!")
 async def friday(ctx):
-	await ctx.channel.send("@here https://www.youtube.com/watch?v=lVvy9NJpKOw")
+	await ctx.channel.send("https://www.youtube.com/watch?v=lVvy9NJpKOw")
 
 @tasks.loop(hours=1.0)
 async def counter():
