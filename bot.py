@@ -267,7 +267,13 @@ async def pedro(ctx, ticker=None):
 		price = json['c']
 		await session.close()
 		value = "$"+str(price)
-		await ctx.channel.send("The current price of " + ticker.upper() + " is: \n" + value)
+
+		msg = discord.Embed(
+			title = ticker.upper(),
+			description = 'The current price of ' + ticker.upper() + " is: \n" + value
+		)
+
+		await ctx.channel.send(embed=msg)
 	
 	await session.close()
 
@@ -314,6 +320,10 @@ async def bees(ctx):
 	msg.set_thumbnail(url='https://i.imgur.com/5xt734i.jpg')
 
 	await ctx.channel.send(embed=msg)
+
+@bot.command(brief="It's the weekend!")
+async def friday(ctx):
+	await ctx.channel.send("https://www.youtube.com/watch?v=lVvy9NJpKOw")
 
 @tasks.loop(hours=1.0)
 async def counter():
