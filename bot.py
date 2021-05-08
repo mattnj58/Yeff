@@ -225,7 +225,7 @@ async def mom(ctx):
 
 @bot.command(brief="Shuts down the bot")
 async def shutdown(ctx):
-	if ctx.message.author.id == dictionary.get('matt'):
+	if ctx.message.author.id == 173502986448797696:
 		print("Shutting Down")
 		try:
 			await ctx.send("Shutting Down.... Bye bye")
@@ -323,7 +323,7 @@ async def bees(ctx):
 
 @bot.command(brief="It's the weekend!")
 async def friday(ctx):
-	await ctx.channel.send("https://www.youtube.com/watch?v=lVvy9NJpKOw")
+	await ctx.channel.send("@here https://www.youtube.com/watch?v=lVvy9NJpKOw")
 
 @tasks.loop(hours=1.0)
 async def counter():
