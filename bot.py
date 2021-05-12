@@ -327,6 +327,10 @@ async def bees(ctx):
 async def friday(ctx):
 	await ctx.channel.send("https://www.youtube.com/watch?v=lVvy9NJpKOw")
 
+@bot.command(brief="It's Wednesday my dudes")
+async def wednesday(ctx):
+	await ctx.channel.send("https://www.youtube.com/watch?v=du-TY1GUFGk")
+
 @tasks.loop(hours=1.0)
 async def counter():
 	global channel
