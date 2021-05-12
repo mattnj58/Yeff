@@ -327,62 +327,61 @@ async def bees(ctx):
 async def friday(ctx):
 	await ctx.channel.send("https://www.youtube.com/watch?v=lVvy9NJpKOw")
 
-# @tasks.loop(hours=1.0)
-# async def counter():
-# 	global channel
-# 	global changed
-# 	global dictionary
-# 	global person
-# 	global loc_dt
+@tasks.loop(hours=1.0)
+async def counter():
+	global channel
+	global changed
+	global dictionary
+	global person
+	global loc_dt
 
-# 	now = loc_dt.strftime("%H")
-# 	beginning = "It is "
-# 	end = "'s day today"
+	now = loc_dt.strftime("%H")
+	beginning = "It is "
+	end = "'s day today"
 
-# 	# person = setPerson(loc_dt)
-# 	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
-# 	weekNum = week_number_of_month(loc_dt.date())-1
+	# person = setPerson(loc_dt)
+	dayNum = findDay(loc_dt.strftime("%d %m %Y"))
+	weekNum = week_number_of_month(loc_dt.date())-1
 
-# 	#reads the csv file of the schedule
-# 	with open('schedule.csv') as file:
-# 		csvFile = csv.reader(file, delimiter=',')
-# 		header= next(csvFile)
-# 		if header != None:
-# 			for i, row in enumerate(csvFile):
-# 				if i==weekNum:
-# 					person = row[dayNum]
+	#reads the csv file of the schedule
+	with open('schedule.csv') as file:
+		csvFile = csv.reader(file, delimiter=',')
+		header= next(csvFile)
+		if header != None:
+			for i, row in enumerate(csvFile):
+				if i==weekNum:
+					person = row[dayNum]
 
-# 	print(loc_dt)
+	print(loc_dt)
 
-# 	for server in bot.guilds:
-# 		for text in server.text_channels:
-# 			if not text.id in channel:
-# 				channel.append(text.id)
-# 			else:
-# 				continue
+	for server in bot.guilds:
+		for text in server.text_channels:
+			if not text.id in channel:
+				channel.append(text.id)
+			else:
+				continue
 
-# 	if len(channel) !=0:
-# 		chan = bot.get_channel(channel[0])
-# 		if now == "10":
-# 			print("Hour " + now)
-# 			print(loc_dt)
-# 			changed = False
-# 			if person in dictionary.keys():
-# 				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
-# 			else:
-# 				await chan.send(beginning + person + end)
-# 		else:
-# 			print(dictionary.get(person))
+	if len(channel) !=0:
+		chan = bot.get_channel(channel[0])
+		if now == "10":
+			print("Hour " + now)
+			print(loc_dt)
+			changed = False
+			if person in dictionary.keys():
+				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
+			else:
+				await chan.send(beginning + person + end)
+		else:
+			print(dictionary.get(person))
 
-# @counter.before_loop
-# async def counterBefore():
-# 	global loc_dt
+@counter.before_loop
+async def counterBefore():
+	global loc_dt
 
-# 	loc_dt = eastern.localize(datetime.datetime.now())
+	loc_dt = eastern.localize(datetime.datetime.now())
 
 
 counter.start()
 
 print("Running")
 bot.run(TOKEN)
-
