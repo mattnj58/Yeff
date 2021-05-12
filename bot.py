@@ -20,6 +20,8 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix=["!",'?'])
 
+loc_dt = ""
+
 #flag to check if corey has changed hands
 changed = False
 
@@ -76,7 +78,7 @@ person = " "
 async def todo(ctx, *, msg=""):
 	tasks = []
 	msg = msg.split(" ")
-	if ctx.message.author.id == dictionary.get('matt'):
+	if ctx.message.author.id == 173502986448797696:
 		if msg[0] == "add" or msg[0] =="a":
 			try:
 				f = open("todo.txt", mode="a")
@@ -331,8 +333,8 @@ async def counter():
 	global changed
 	global dictionary
 	global person
+	global loc_dt
 
-	loc_dt = eastern.localize(datetime.datetime.now())
 	now = loc_dt.strftime("%H")
 	beginning = "It is "
 	end = "'s day today"
@@ -372,11 +374,14 @@ async def counter():
 		else:
 			print(dictionary.get(person))
 
-# @counter.before_loop
-# async def counterBefore():
-# 	global 
+@counter.before_loop
+async def counterBefore():
+	global loc_dt
 
-#counter.start()
+	loc_dt = eastern.localize(datetime.datetime.now())
+
+
+counter.start()
 
 print("Running")
 bot.run(TOKEN)
