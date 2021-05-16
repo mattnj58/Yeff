@@ -331,7 +331,7 @@ async def friday(ctx):
 async def wednesday(ctx):
 	await ctx.channel.send("https://www.youtube.com/watch?v=du-TY1GUFGk")
 
-@tasks.loop(hours=1.0)
+@tasks.loop(seconds=5.0)
 async def counter():
 	global channel
 	global changed
@@ -356,8 +356,6 @@ async def counter():
 				if i==weekNum:
 					person = row[dayNum]
 
-	print(loc_dt)
-
 	for server in bot.guilds:
 		for text in server.text_channels:
 			if not text.id in channel:
@@ -380,11 +378,10 @@ async def counter():
 @counter.before_loop
 async def counterBefore():
 	global loc_dt
-
 	loc_dt = eastern.localize(datetime.datetime.now())
 
 
-# counter.start()
+counter.start()
 
 print("Running")
 bot.run(TOKEN)
