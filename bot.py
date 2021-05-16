@@ -369,14 +369,13 @@ async def counter():
 		chan = bot.get_channel(channel[0])
 		if now == "10":
 			print("Hour " + now)
-			print(loc_dt)
 			changed = False
 			if person in dictionary.keys():
 				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
 			else:
 				await chan.send(beginning + person + end)
 		else:
-			print(dictionary.get(person))
+			print(now)
 
 @counter.before_loop
 async def counterBefore():
