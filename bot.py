@@ -28,6 +28,13 @@ changed = False
 #A list of all the channels in the discord
 channel = []
 
+#Sets the time of the programming for a hourly check 
+eastern=timezone("US/Eastern")
+loc_dt = eastern.localize(datetime.datetime.now())
+
+#Person of the day
+person = " "
+
 #this is a dictionary of all the people who I know is part of the schedule
 dictionary = {'cathy': '443813095622705152','anthony': '133779065600475137', 'henry': '139598054373195776', 'yeff': '155755250228264960','wendy': '411300301174341653','jihoon': '77268822075125760', 'matt': '173502986448797696','pedro':'177602897381556224', 'jon': '77186511736410112', 'christine':'434507044905680898'}
 weekDay = {'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'}
@@ -67,12 +74,6 @@ def setPerson(time):
 				if i==weekNum:
 					peep = row[dayNum]
 	return peep
-
-eastern=timezone("US/Eastern")
-loc_dt = eastern.localize(datetime.datetime.now())
-# print(loc_dt)
-
-person = " "
 
 @bot.command(brief="Adds and removes task from the todo list")
 async def todo(ctx, *, msg=""):
@@ -126,7 +127,7 @@ async def today(ctx):
 	else:
 		await ctx.channel.send(beginning + person + end)
 
-@bot.command()
+@bot.command(brief="The week number")
 async def week(ctx):
 	global weekNum
 
@@ -238,7 +239,7 @@ async def shutdown(ctx):
 	else:
 		await ctx.send("You do not own this bot!")
 
-# price search
+# price search with a given stock ticker
 @bot.command(brief="Dedicated command for pedro")
 async def pedro(ctx, ticker=None):
 	global url
@@ -279,6 +280,7 @@ async def pedro(ctx, ticker=None):
 	
 	await session.close()
 
+#Looks up the stock symbol given a company name
 @bot.command(brief= "Stock symbol search up")
 async def stonk(ctx, *name):
 
@@ -331,7 +333,7 @@ async def friday(ctx):
 async def wednesday(ctx):
 	await ctx.channel.send("https://www.youtube.com/watch?v=du-TY1GUFGk")
 
-@tasks.loop(seconds=5.0)
+@tasks.loop(hours=5.0)
 async def counter():
 	global channel
 	global changed
