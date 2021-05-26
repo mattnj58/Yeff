@@ -334,27 +334,78 @@ async def wednesday(ctx):
 	await ctx.channel.send("https://www.youtube.com/watch?v=du-TY1GUFGk")
 
 @bot.command()
-async def hennbot(ctx):
-	try:
-		file = open("hennbot.txt", "r")
-		lines = file.readlines()
-		file.close()
-		value = str(int(lines[0])+1)
+async def hennbot(ctx, op):
+	value = 0
+	if(op == "add"):
+		try:
+			file = open("hennbot.txt", "r")
+			lines = file.readlines()
+			file.close()
+			value = str(int(lines[0])+1)
 
+			f = open("hennbot.txt", "w")
+			f.write(value)
+			f.close()
+			
+			f2=open("hennbot.txt", mode='r')
+			lines = f2.readlines()
+			f2.close()
+			value = lines[0]
+			
+			await ctx.channel.send("Days without hennbot: " + value)
+		
+		except OSError as err:
+			print(err)
+
+		except:
+			await ctx.channel.send("<@"+dictionary.get("matt")+"> is a dumbass")
+
+	elif (op == "check"):
+		try:
+			file = open("hennbot.txt","r")
+			lines = file.readlines()
+			file.close()
+			value = lines[0]
+
+			await ctx.channel.send("Days without hennbot: " + value)
+		except:
+			await ctx.channel.send("<@"+dictionary.get("matt")+"> is a dumbass")
+	elif (op == "sub"):
+		try:
+			file = open("hennbot.txt", "r")
+			lines = file.readlines()
+			file.close()
+			value = int(lines[0])
+			
+			if value != 0:
+				value-=1
+			else:
+				await ctx.channel.send("Cannot go below 0")
+
+			f = open("hennbot.txt", "w")
+			f.write(str(value))
+			f.close()
+			
+			f2=open("hennbot.txt", mode='r')
+			lines = f2.readlines()
+			f2.close()
+			value = lines[0]
+			
+			await ctx.channel.send("Days without hennbot: " + value)
+		
+		except OSError as err:
+			print(err)
+
+		except:
+			await ctx.channel.send("<@"+dictionary.get("matt")+"> is a dumbass")
+	elif (op == 'reset'):
 		f = open("hennbot.txt", "w")
-		f.write(str(value))
+		f.write('0')
 		f.close()
 		
-		f2=open("hennbot.txt", mode='r')
-		lines = f2.readlines()
-		f2.close()
-		value = int(lines[0])
-		
-		await ctx.channel.send("Days without hennbot: " + value)
-	
-	except OSError as err:
-		print(err)
-		await ctx.channel.send("hennbot is being bad")
+		await ctx.channel.send("Days without hennbot has been reset")
+	else:
+		await ctx.channel.send("Operation not recgonized. Please use check, add, sub, or reset")
 
 @tasks.loop(hours=1.0)
 async def counter():
