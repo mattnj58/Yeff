@@ -333,6 +333,29 @@ async def friday(ctx):
 async def wednesday(ctx):
 	await ctx.channel.send("https://www.youtube.com/watch?v=du-TY1GUFGk")
 
+@bot.command()
+async def hennbot(ctx):
+	try:
+		file = open("hennbot.txt", "r")
+		lines = file.readlines()
+		file.close()
+		value = str(int(lines[0])+1)
+
+		f = open("hennbot.txt", "w")
+		f.write(str(value))
+		f.close()
+		
+		f2=open("hennbot.txt", mode='r')
+		lines = f2.readlines()
+		f2.close()
+		value = int(lines[0])
+		
+		await ctx.channel.send("Days without hennbot: " + value)
+	
+	except OSError as err:
+		print(err)
+		await ctx.channel.send("hennbot is being bad")
+
 @tasks.loop(hours=1.0)
 async def counter():
 	global channel
@@ -381,7 +404,6 @@ async def counter():
 async def counterBefore():
 	global loc_dt
 	loc_dt = eastern.localize(datetime.datetime.now())
-
 
 counter.start()
 
