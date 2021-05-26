@@ -405,7 +405,7 @@ async def counterBefore():
 	global loc_dt
 	loc_dt = eastern.localize(datetime.datetime.now())
 
-counter.start()
+# counter.start()
 
 print("Running")
 bot.run(TOKEN)
