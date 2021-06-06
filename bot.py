@@ -148,7 +148,7 @@ async def schedule(ctx):
 @bot.command(brief="Changes the who's day it is with Corey")
 async def change(ctx, newPerson):
 
-	global changed
+	# global changed
 	global person
 
 	# if changed == False:
