@@ -151,11 +151,13 @@ async def change(ctx, newPerson):
 	global changed
 	global person
 
-	if changed == False:
-		changed = True
-		await ctx.channel.send("It was <@" + dictionary.get(person) + ">'s day, but it's " + newPerson + "'s day now")
-	else:
-		await ctx.channel.send("The day has been changed, you cannot change it again")
+	# if changed == False:
+	# 	changed = True
+	# 	await ctx.channel.send("It was <@" + dictionary.get(person) + ">'s day, but it's " + newPerson + "'s day now")
+	# else:
+	# 	await ctx.channel.send("The day has been changed, you cannot change it again")
+
+	await ctx.channel.send("It was <@" + dictionary.get(person) + ">'s day, but it's " + newPerson + "'s day now")
 
 @bot.command(pass_context=True, aliases=['changeback'], brief="Changes back the day to the original person on the schedule")
 async def changeBack(ctx):
