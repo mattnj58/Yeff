@@ -148,16 +148,16 @@ async def schedule(ctx):
 @bot.command(brief="Changes the who's day it is with Corey")
 async def change(ctx, newPerson):
 
-	# global changed
+	global changed
 	global person
 
-	# if changed == False:
-	# 	changed = True
-	# 	await ctx.channel.send("It was <@" + dictionary.get(person) + ">'s day, but it's " + newPerson + "'s day now")
-	# else:
-	# 	await ctx.channel.send("The day has been changed, you cannot change it again")
+	if changed == False:
+		changed = True
+		await ctx.channel.send("It was <@" + dictionary.get(person) + ">'s day, but it's " + newPerson + "'s day now")
+	else:
+		await ctx.channel.send("The day has been changed, you cannot change it again")
 
-	await ctx.channel.send("It was <@" + dictionary.get(person) + ">'s day, but it's " + newPerson + "'s day now")
+	# await ctx.channel.send("It was <@" + dictionary.get(person) + ">'s day, but it's " + newPerson + "'s day now")
 
 @bot.command(pass_context=True, aliases=['changeback'], brief="Changes back the day to the original person on the schedule")
 async def changeBack(ctx):
@@ -443,13 +443,13 @@ async def counter():
 
 	if len(channel) !=0:
 		chan = bot.get_channel(channel[0])
-		if now == "10":
+		if now == "8":
 			print("Hour " + now)
 			changed = False
-			if person in dictionary.keys():
-				await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
-			else:
-				await chan.send(beginning + person + end)
+			# if person in dictionary.keys():
+			# 	await chan.send(beginning + "<@" + dictionary.get(person) + ">" + end)
+			# else:
+			# 	await chan.send(beginning + person + end)
 		else:
 			print(now)
 
@@ -458,7 +458,7 @@ async def counterBefore():
 	global loc_dt
 	loc_dt = eastern.localize(datetime.datetime.now())
 
-# counter.start()
+counter.start()
 
 print("Running")
 bot.run(TOKEN)
