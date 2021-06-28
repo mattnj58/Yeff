@@ -54,7 +54,7 @@ def week_number_of_month(date_value):
 	adjustedDom = dom + firstDay.weekday()
 	num = int(ceil((adjustedDom/7.0)))
 
-	if num>5:
+	if num>4:
 		num=1
 
 	return num
